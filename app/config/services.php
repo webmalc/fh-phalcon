@@ -3,15 +3,21 @@
 use Phalcon\DI\FactoryDefault;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\Url as UrlResolver;
-use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
+use Phalcon\Db\Adapter\Pdo\Postgresql as DbAdapter;
 use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
+use Phalcon\Mvc\Router;
 
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
  */
 $di = new FactoryDefault();
+
+/**
+ * Config service
+ */
+$di->set('config', $config);
 
 /**
  * The URL component is used to generate all kind of urls in the application
@@ -22,6 +28,16 @@ $di->set('url', function () use ($config) {
 
     return $url;
 }, true);
+
+/**
+ * Registering a router
+ */
+$di->set('router', function () {
+    $router = new Router();
+    $router->setDefaultNamespace('FH\Controllers');
+
+    return $router;
+});
 
 /**
  * Setting up the view component
@@ -39,7 +55,8 @@ $di->set('view', function () use ($config) {
 
             $volt->setOptions(array(
                 'compiledPath' => $config->application->cacheDir,
-                'compiledSeparator' => '_'
+                'compiledSeparator' => '_',
+                'compileAlways' => ($config->environment->type == 'dev') ? true : false,
             ));
 
             return $volt;
