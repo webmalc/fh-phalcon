@@ -95,3 +95,26 @@ $di->set('session', function () {
 
     return $session;
 });
+
+/**
+ * Setting up logger
+ */
+$di->set('logger', function () use ($di) {
+    $logger = new Phalcon\Logger\Adapter\File($di->get('config')->application->logPath);
+    return $logger;
+}, true);
+
+/**
+ * Setting up helper
+ */
+$di->set('helper', function () {
+    return new FH\Lib\Helper();
+}, true);
+
+/**
+ * Setting up acl
+ */
+$di->set('acl', function() use ($di) {
+    $config = $di->get('config')->acl;
+    return new FH\Lib\Acl($config->path, $config->apc);
+}, true);

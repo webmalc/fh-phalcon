@@ -1,5 +1,4 @@
 <?php
-
 mb_internal_encoding('UTF-8');
 
 try {
@@ -8,6 +7,14 @@ try {
      * Read the configuration
      */
     $config = new \Phalcon\Config\Adapter\Ini(__DIR__ . "/../app/config/config.ini");
+
+    /**
+     * Errors
+     */
+    if (!$config->environment->type != 'prod') {
+        error_reporting(E_ALL & ~E_NOTICE);
+        ini_set("display_errors", 1);
+    }
 
     /**
      * Read auto-loader

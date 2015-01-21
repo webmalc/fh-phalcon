@@ -8,6 +8,8 @@ $loader = new \Phalcon\Loader();
 $loader->registerNamespaces(
     [
         'FH\Controllers' => $config->application->controllersDir,
-        'FH\Models' => $config->application->modelsDir
+        'FH\Models' => $config->application->modelsDir,
+        'FH\Lib' => $config->application->libDir,
+        'FH\Validators' => $config->application->validatorsDir
     ]
 )->register();
