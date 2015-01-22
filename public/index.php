@@ -17,6 +17,11 @@ try {
     }
 
     /**
+     * Include composer autoload
+     */
+    require __DIR__ . '/../vendor/autoload.php';
+
+    /**
      * Read auto-loader
      */
     include __DIR__ . "/../app/config/loader.php";
