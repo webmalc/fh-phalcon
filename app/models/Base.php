@@ -198,6 +198,6 @@ class Base extends Model implements \JsonSerializable
     public function beforeDelete()
     {
         // Create log
-        $this->getDI()->get('logger')->log('Deleted entry with class ' . get_class($this) . ' and id #' . $this->id, Logger::INFO);
+        $this->getDI()->get('logger')->log('Deleted entry with classFget ' . get_class($this) . ' and id #' . $this->id, Logger::INFO);
     }
 }

@@ -1,0 +1,21 @@
+/* show/hide animation */
+.fade-in.ng-hide-remove.ng-hide-remove-active {
+  -webkit-animation: fadeIn 0.5s;
+  -moz-animation: fadeIn 0.5s;
+  -o-animation: fadeIn 0.5s;
+  animation: fadeIn 0.5s;
+}
+
+.bounce-in.ng-hide-remove.ng-hide-remove-active {
+  -webkit-animation: bounceIn 0.5s;
+  -moz-animation: bounceIn 0.5s;
+  -o-animation: bounceIn 0.5s;
+  animation: bounceIn 0.5s;
+}
+
+.flip-in.ng-hide-remove.ng-hide-remove-active {
+  -webkit-animation: flipInX 0.5s;
+  -moz-animation: flipInX 0.5s;
+  -o-animation: flipInX 0.5s;
+  animation: flipInX 0.5s;
+}

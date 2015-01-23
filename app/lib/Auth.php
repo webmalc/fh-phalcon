@@ -31,7 +31,8 @@ class Auth extends Component
      */
     public function resetPassword($email)
     {
-        $user = Users::findFirst([
+        /* @var $user \FH\Models\User */
+        $user = User::findFirst([
             'conditions' => " email = :email: AND active = :active:",
             'bind' => ['email' => $email, 'active' => true]
         ]);
@@ -40,10 +41,30 @@ class Auth extends Component
         if (empty($user)) {
             throw new Exception('User with email ' . $email . ' not found');
         }
-        $password = $this->di->helper->getToken(6, true, 'lud');
+        $password = $this->di->get('helper')->getToken(6, true, 'lud');
         $user->setPassword($password);
         $user->save();
-        $this->di->mail->send($user->email, 'New password: ' . $password);
+        $this->di->get('mail')->send($user->email, 'New password: ' . $password);
+    }
+
+    /**
+     * Create default user
+     * @return User|null
+     */
+    public function defaultUserCreate()
+    {
+        if (!User::find()->count()) {
+            $config = $this->di->get('config');
+            $user = new User();
+            $user->setData($config->user->toArray());
+            $user->roles = [$config->user->role];
+            $user->setPassword($config->user->password);
+            if ($user->save()) {
+                return $user;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -51,31 +72,40 @@ class Auth extends Component
      * @param string $email
      * @param string $password
      * @param boolean $remember
-     * @return FH\Frontend\Models\Users
+     * @return \FH\Models\User
      * @throws \FH\Lib\Exception
      */
     public function check($email, $password, $remember = false)
     {
-        $user = Users::findFirst([
-            ['email' => $email, 'active' => true]
+        //Create default user
+        $this->defaultUserCreate();
+
+        /* @var $user \FH\Models\User */
+        $user = User::findFirst([
+            'conditions' => " email = :email: AND active = :active:",
+            'bind' => ['email' => $email, 'active' => true]
         ]);
-// Check if the user exist
+
+        // Check if the user exist
         if (empty($user)) {
-            throw new Exception('Не существует пользователя с email: ' . $email);
+            throw new Exception('User with email ' . $email . ' not found');
         }
-// Check user passsord
+
+        // Check user password
         if (!password_verify($password, $user->password)) {
-            throw new Exception('Неверный пароль для пользователя с email: ' . $email);
+            throw new Exception('Wrong password for user with email ' . $email);
         }
+
         return $this->login($user, $remember);
     }
+
     /**
      * Login user
-     * @param \FH\Frontend\Models\Users $user
+     * @param \FH\Models\User $user
      * @param boolean $remember
-     * @return type
+     * @return \FH\Models\User
      */
-    public function login(Users $user, $remember = false)
+    public function login(User $user, $remember = false)
     {
         $this->setSession($user);
         if ($remember) {
@@ -83,29 +113,37 @@ class Auth extends Component
         }
         $user->lastLogin = new \DateTime();
         $user->save();
-// Create log
-        $this->getDI()->get('logger')->log('Logged user #' . $user->getId() . ' with email: '. $user->email);
+
+        // Create log
+        $this->getDI()->get('logger')->log('Logged user #' . $user->id . ' with email: '. $user->email);
+
         return $user;
     }
+
     /**
      * Set auth session
-     * @param \FH\Frontend\Models\Users $user
+     * @param \FH\Models\User $user
+     * @return \FH\Models\User
      */
-    private function setSession(Users $user)
+    private function setSession(User $user)
     {
-        $this->session->set('auth', $user->getId());
+        $this->session->set('auth', $user->id);
+
+        return $user;
     }
+
     /**
      * Set auth session
-     * @param \FH\Frontend\Models\Users $user
-     * @return \FH\Frontend\Models\Users
+     * @param \FH\Models\User $user
+     * @return \FH\Models\User
      */
-    private function setCookie(Users $user)
+    private function setCookie(User $user)
     {
-        $token = $this->helper->getToken(40, false, 'lud');
-        $this->cookies->set('auth', serialize(['id' => $user->getId(), 'token' => $token]), time() + 60 * 60 * 24 * 7);
+        $token = $this->di->get('helper')->getToken(40, false, 'lud');
+        $this->cookies->set('auth', serialize(['id' => $user->id, 'token' => $token]), time() + 60 * 60 * 24 * 7);
         $user->cookie = password_hash($token, PASSWORD_DEFAULT);
         $user->cookieIp = $this->request->getClientAddress();
+
         return $user;
     }
     /**
@@ -141,6 +179,12 @@ class Auth extends Component
      */
     public function logout()
     {
+        $user = $this->getUser();
+        if ($user) {
+            $user->cookie = null;
+            $user->cookieIp = null;
+            $user->save();
+        }
         $this->session->remove('auth');
         if ($this->getCookie()) {
             $this->cookies->delete('auth');
@@ -148,7 +192,7 @@ class Auth extends Component
     }
     /**
      * Return user instance
-     * @return \FH\Frontend\Models\Users|null
+     * @return \FH\Models\User|null
      */
     public function getUser()
     {
@@ -160,11 +204,14 @@ class Auth extends Component
             return $this->user;
         }
         if ($type == self::AUTH_SESSION) {
-            $user = Users::findById($this->session->get('auth'));
+            /* @var $user \FH\Models\User */
+            $user = User::findFirst($this->session->get('auth'));
         }
         if ($type == self::AUTH_COOKIE) {
             $cookie = $this->getCookie();
-            $user = Users::findById($cookie['id']);
+
+            /* @var $user \FH\Models\User */
+            $user = User::findFirst($cookie['id']);
             $ip = $this->request->getClientAddress();
             if (empty($user) || !password_verify($cookie['token'], $user->cookie) || $user->cookieIp != $ip) {
                 return null;

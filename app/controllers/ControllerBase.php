@@ -16,14 +16,15 @@ class ControllerBase extends Controller
     {
         $controllerName = $dispatcher->getControllerName();
         $actionName = $dispatcher->getActionName();
-        $user = $this->auth->getUser();
-        if ($this->acl->isProtected($controllerName, $actionName)) {
+
+        $user = $this->di->get('auth')->getUser();
+        if ($this->di->get('acl')->isProtected($controllerName, $actionName)) {
             // if user not logged
             if(empty($user)) {
                 return $this->response->redirect('user/login');
             }
             // if user not allowed to controller/action
-            if(!$this->acl->isAllowed($user, $controllerName, $actionName)) {
+            if(!$this->di->get('acl')->isAllowed($user, $controllerName, $actionName)) {
                 return $this->response->redirect('user/login');
             }
         }

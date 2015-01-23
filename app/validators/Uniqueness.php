@@ -35,7 +35,7 @@ class Uniqueness extends Validator implements ValidatorInterface
             $result = false;
         }
 
-        if (!empty($id) && count($entries) && $entries[0]->getId() != $id) {
+        if (!empty($id) && count($entries) && $entries[0]->id != $id) {
             $result = false;
         }
 

@@ -118,3 +118,27 @@ $di->set('acl', function() use ($di) {
     $config = $di->get('config')->acl;
     return new FH\Lib\Acl($config->path, $config->apc);
 }, true);
+
+/**
+ * Setting up mail
+ */
+$di->set('mail', function() {
+    return new FH\Lib\Mail();
+}, true);
+
+/**
+ * Setting up auth
+ */
+$di->set('auth', function () {
+    return new FH\Lib\Auth();
+}, true);
+
+/**
+ * Setting up crypt
+ */
+$di->set('crypt', function() use ($di) {
+    $crypt = new Phalcon\Crypt();
+    $crypt->setKey($di->get('config')->environment->token);
+
+    return $crypt;
+});

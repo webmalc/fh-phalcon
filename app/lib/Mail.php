@@ -27,7 +27,7 @@ class Mail extends Component
      */
     private function setMailer()
     {
-        $config = $this->di-config;
+        $config = $this->di->get('config');
         $transport = \Swift_SmtpTransport::newInstance(
             $config->smtp->host,
             $config->smtp->port,
@@ -48,11 +48,11 @@ class Mail extends Component
      */
     public function send($email, $text, $subject = null)
     {
-        $config = $this->getDI()->get('config');
+        $config = $this->di->get('config');;
         if (empty($subject)) {
             $subject = $config->mail->subject;
         }
-        $body = $this->getDI()->get('view')->getRender('mail', 'base', ['content' => $text, 'subject' => $subject]);
+        $body = $this->di->get('view')->getRender('mail', 'base', ['content' => $text, 'subject' => $subject]);
         $message = \Swift_Message::newInstance($subject)
             ->setFrom($config->mail->fromEmail, $config->mail->fromName)
             ->setTo($email)
