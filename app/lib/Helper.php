@@ -60,7 +60,7 @@ class Helper
         return $dashStr;
     }
 
-    public function gravatar($email, $size = 45, $rating = 'x', $default = 'mm')
+    public function gravatar($email, $size = 35, $rating = 'x', $default = 'mm')
     {
         $hash = md5(strtolower(trim($email)));
         $link = 'http://www.gravatar.com/avatar/' . $hash . '?s=' . $size . '&d=' . $default . '&r' . $rating;

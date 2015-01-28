@@ -7,7 +7,7 @@
 $di->get('assets')
     ->collection('cdnCss')
     ->setLocal(false)
-    ->addCss('//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css')
+    ->addCss('//maxcdn.bootstrapcdn.com/bootswatch/3.3.2/yeti/bootstrap.min.css')
     ->addCss('//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css')
     ->addCss('//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css')
 ;
@@ -19,6 +19,7 @@ $di->get('assets')
     ->setTargetUri('css/fh.css')
     ->addCss('css/001-app.css')
     ->addCss('css/002-animation.css')
+    ->addCss('css/003-navbar.css')
     ->join(true)
     ->addFilter(new \Phalcon\Assets\Filters\Cssmin())
 ;

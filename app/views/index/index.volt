@@ -1,4 +1,4 @@
-{% extends "layouts/base.volt" %}
+{% extends "layouts/page.volt" %}
 
 {% block content %}
     <h1>Congratulations!21</h1>

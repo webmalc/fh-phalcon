@@ -19,6 +19,7 @@
 		<![endif]-->
 	</head>
 	<body>
+		{% block navbar %}{% endblock %}
 
 		<div class="container main-container">
 			{% block content %}{% endblock %}

@@ -68,7 +68,6 @@ class AuthController extends ControllerBase
                 'message' => 'Yes! A new password sent to you.'
             ]);
         } catch (\Exception $e) {
-            var_dump($e); exit();
             $message = 'Oops! Something went wrong.';
             if ($this->di->get('config')->environment->type == 'dev') {
                 $message = $e->getMessage();

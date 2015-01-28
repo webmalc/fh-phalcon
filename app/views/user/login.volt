@@ -22,7 +22,7 @@
                             <div class="form-group">
                                 <div class="input-group" ng-class="{ 'has-error' : loginForm.email.$invalid && loginForm.email.$dirty && !loginForm.email.$focused }">
                                     <span class="input-group-addon"><i class="fa fa-user fa-lg"></i></span>
-                                    <input type="email" name="email" ng-focus ng-model="login.email" class="form-control" placeholder="e-mail" required>
+                                    <input autofocus type="email" name="email" ng-focus ng-model="login.email" class="form-control" placeholder="e-mail" required>
                                 </div>
                             </div>
                             <div class="form-group">
