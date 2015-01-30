@@ -50,7 +50,8 @@ class Acl extends Component
      */
     private $protectedControllers = [
         self::ROLE_USER_NAME => [
-            'index' => ['index']
+            'index' => ['index'],
+            'user' => ['profile']
         ]
     ];
 

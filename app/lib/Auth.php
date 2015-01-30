@@ -174,12 +174,16 @@ class Auth extends Component
         }
         return false;
     }
+
     /**
      * Remove auth session
+     * @param User $user
      */
-    public function logout()
+    public function logout(User $user = null)
     {
-        $user = $this->getUser();
+        if(!$user) {
+            $user = $this->getUser();
+        }
         if ($user) {
             $user->cookie = null;
             $user->cookieIp = null;
@@ -214,6 +218,9 @@ class Auth extends Component
             $user = User::findFirst($cookie['id']);
             $ip = $this->request->getClientAddress();
             if (empty($user) || !password_verify($cookie['token'], $user->cookie) || $user->cookieIp != $ip) {
+                if ($user) {
+                    $this->logout($user);
+                }
                 return null;
             }
         }

@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-xs-4 col-xs-offset-4">
+        <div class="col-md-4 col-md-offset-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Sign in to FamilyHelper </h3>
@@ -33,10 +33,10 @@
                             </div>
                             <div class="checkbox">
                                 <div class="row">
-                                    <div class="col-xs-6">
+                                    <div class="col-md-6">
                                         <label><input type="checkbox" ng-init="login.remember = true" name="_remember_me" ng-model="login.remember" value="on" checked> remember me?</label>
                                     </div>
-                                    <div class="col-xs-6 text-right">
+                                    <div class="col-md-6 text-right">
                                         <a href ng-click="form.password = true; error = ''">forgot password?</a>
                                     </div>
                                 </div>
@@ -56,7 +56,7 @@
                             </div>
                             <div class="checkbox">
                                 <div class="row">
-                                    <div class="col-xs-12 text-right">
+                                    <div class="col-md-12 text-right">
                                         <a href ng-click="form.password = false; error = ''">cancel</a>
                                     </div>
                                 </div>

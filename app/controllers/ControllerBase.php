@@ -1,11 +1,18 @@
 <?php
 namespace FH\Controllers;
 
+use FH\Lib\Exception;
 use Phalcon\Mvc\Controller;
 use \Phalcon\Mvc\Dispatcher;
 
 class ControllerBase extends Controller
 {
+    public function onlyAjax()
+    {
+        if (!$this->request->isAjax()) {
+            throw new Exception('Only AJAX requests allowed.');
+        }
+    }
 
     /**
      * Execute before the router
@@ -18,6 +25,7 @@ class ControllerBase extends Controller
         $actionName = $dispatcher->getActionName();
 
         $user = $this->di->get('auth')->getUser();
+
         if ($this->di->get('acl')->isProtected($controllerName, $actionName)) {
             // if user not logged
             if(empty($user)) {

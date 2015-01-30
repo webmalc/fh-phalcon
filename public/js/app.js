@@ -6,6 +6,7 @@ angular.module('fh.controllers', [
     'fh.services'
 ]);
 angular.module('fh', [
+    'ngRoute',
     'ngAnimate',
     'ui.bootstrap',
     'fh.directives',

@@ -1,7 +1,10 @@
 {% extends "layouts/page.volt" %}
 
 {% block content %}
-    <h1>Congratulations!21</h1>
-
-    <p>You're now flying with Phalcon. Great things are about to happen!</p>
+    <div id="loading-wrapper" ng-show="layout.loading">
+        <div id="loading-message" class="text-center">
+            <h3><i class="fa fa-spin fa-spinner fa-lg"></i> Loading...</h3>
+        </div>
+    </div>
+    <div id="content" ng-view></div>
 {% endblock %}

@@ -12,7 +12,7 @@ class AuthController extends ControllerBase
     public function loginAction()
     {
         $data = $this->jsonRequest('post');
-        if ($this->di->get('auth')->isLogged() || empty($data) || empty($data['email']) || empty($data['password'])) {
+        if ($this->di->get('auth')->getUser() || empty($data) || empty($data['email']) || empty($data['password'])) {
             return $this->error404();
         }
         try {
@@ -42,7 +42,7 @@ class AuthController extends ControllerBase
      */
     public function logoutAction()
     {
-        if (!$this->di->get('auth')->isLogged()) {
+        if (!$this->di->get('auth')->getUser()) {
             return $this->error404();
         }
         $this->di->get('auth')->logout();
@@ -57,7 +57,7 @@ class AuthController extends ControllerBase
     public function remindAction()
     {
         $data = $this->jsonRequest('post');
-        if ($this->di->get('auth')->isLogged() || empty($data) || empty($data['email'])) {
+        if ($this->di->get('auth')->getUser() || empty($data) || empty($data['email'])) {
             return $this->error404();
         }
         try {

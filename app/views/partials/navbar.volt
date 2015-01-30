@@ -2,8 +2,8 @@
     <div class="container">
 
         <div class="navbar-header">
-            <a href="../" class="navbar-brand">
-                <small><i class="fa fa-male"></i><i class="fa fa-child"></i><i class="fa fa-female"></i></small> FamilyHelper
+            <a href="{{ url('#/') }}" class="navbar-brand">
+                <i class="fa fa-venus-mars"></i> FamilyHelper
             </a>
             <button ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed;" class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
                 <span class="icon-bar"></span>
@@ -15,7 +15,7 @@
         <div class="navbar-collapse collapse" id="navbar-main" ng-class="!navCollapsed && 'in'">
 
             <ul class="nav navbar-nav">
-                <li><a href="/"><i class="fa fa-dollar"></i> Finances</a></li>
+                <li><a href="{{ url('#/finances') }}"><i class="fa fa-dollar"></i> Finances</a></li>
             </ul>
 
             {% if auth.getUser() %}
@@ -28,9 +28,9 @@
                 <li class="dropdown" dropdown>
                     <a href="#" class="dropdown-toggle"  dropdown-toggle>Hello, {{ auth.getUser().getUsername() }} <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="user">
-                        <li><a href="/user/profile"><i class="fa fa-user"></i> Profile</a></li>
+                        <li><a href="{{ url('#/user/profile') }}"><i class="fa fa-user"></i> Profile</a></li>
                         <li class="divider"></li>
-                        <li><a href="/auth/logout"><i class="fa fa-sign-out"></i> Sign out</a></li>
+                        <li><a href="{{ url('auth/logout') }}"><i class="fa fa-sign-out"></i> Sign out</a></li>
                     </ul>
                 </li>
             </ul>
