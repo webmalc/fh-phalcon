@@ -2,13 +2,13 @@
 
 angular.module('fh.directives', []);
 angular.module('fh.services', []);
-angular.module('fh.controllers', [
-    'fh.services'
-]);
+angular.module('fh.controllers', []);
 angular.module('fh', [
+    'ngResource',
     'ngRoute',
     'ngAnimate',
     'ui.bootstrap',
+    'xeditable',
     'fh.directives',
     'fh.services',
     'fh.controllers'

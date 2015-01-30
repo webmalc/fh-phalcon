@@ -36,7 +36,7 @@ class Base extends Model implements \JsonSerializable
     protected function getExcludeFields()
     {
         return [
-            '_id', 'createdAt', 'updatedAt'
+            'id', 'createdAt', 'updatedAt'
         ];
     }
     /**

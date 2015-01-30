@@ -26,4 +26,48 @@ class UserController extends ControllerBase
         $this->onlyAjax();
     }
 
+    /**
+     * Returns current user as JSON
+     * @return \Phalcon\Http\Response
+     */
+    public function loggedAction()
+    {
+        $this->onlyAjax();
+        $user = $this->di->get('auth')->getUser();
+
+        if (!$user) {
+            return $this->error404();
+        }
+
+        return $this->jsonResponse($user);
+    }
+
+    /**
+     * Save current user
+     * @return \Phalcon\Http\Response
+     */
+    public function loggedSaveAction()
+    {
+        $data = $this->jsonRequest('post');
+        $user = $this->di->get('auth')->getUser();
+
+        if (!$user || empty($data)) {
+            return $this->error404();
+        }
+        $user->setData($data);
+        if (!empty($data['password'])) {
+            $user->setPassword($data['password']);
+        }
+        if ($user->save()) {
+            return $this->jsonResponse([
+               'success' => true
+            ]);
+        } else {
+            return $this->jsonResponse([
+                'success' => false,
+                'message' => implode('; ', $user->getMessages())
+            ]);
+        }
+
+    }
 }

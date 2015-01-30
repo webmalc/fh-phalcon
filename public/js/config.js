@@ -36,8 +36,16 @@ angular.module('fh')
         '$location',
         '$route',
         '$timeout',
-        function ($rootScope, $location, $route, $timeout) {
+        'editableOptions',
+        'editableThemes',
+        function ($rootScope, $location, $route, $timeout, editableOptions, editableThemes) {
 
+            //xeditable
+            editableOptions.theme = 'bs3';
+            editableThemes.bs3.inputClass = 'input-sm';
+            editableThemes.bs3.buttonsClass = 'btn-sm';
+
+            //routing
             $rootScope.config = {};
             $rootScope.config.app_url = $location.url();
             $rootScope.config.app_path = $location.path();

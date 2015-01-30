@@ -45,7 +45,9 @@ try {
 
 } catch (\Exception $e) {
     if($application->getDI()->get('config')->environment->type != 'prod') {
-        var_dump($e);
+        $response =  $application->getDI()->get('response');
+        $response->setStatusCode(500 , $e->getMessage());
+        $response->send();
     } else {
         $application->getDI()->get('logger')->log($e->getMessage(), \Phalcon\Logger::ERROR);
         $response =  $application->getDI()->get('response');

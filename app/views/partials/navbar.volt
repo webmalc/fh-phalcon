@@ -21,12 +21,12 @@
             {% if auth.getUser() %}
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a href="http://gravatar.com/emails/" id="user-gravatar-link" tooltip-placement="bottom" tooltip="Change your avatar at gravatar.com">
+                    <a  target="_blank" href="http://gravatar.com/emails/" id="user-gravatar-link" tooltip-placement="bottom" tooltip="Change your avatar at gravatar.com">
                         <img src="{{ helper.gravatar(auth.getUser().email) }}" alt="{{ auth.getUser().email }} gravatar" class="img-circle">
                     </a>
                 </li>
                 <li class="dropdown" dropdown>
-                    <a href="#" class="dropdown-toggle"  dropdown-toggle>Hello, {{ auth.getUser().getUsername() }} <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle"  dropdown-toggle ng-cloak>Hello, {[{ user.name || user.email }]} <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="user">
                         <li><a href="{{ url('#/user/profile') }}"><i class="fa fa-user"></i> Profile</a></li>
                         <li class="divider"></li>

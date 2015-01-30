@@ -16,6 +16,7 @@
     "tests"
   ],
   "dependencies": {
-    "autofill-event": "~1.0.0"
+    "autofill-event": "~1.0.0",
+    "angular-xeditable": "~0.1.8"
   }
 }
