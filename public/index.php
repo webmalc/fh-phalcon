@@ -43,12 +43,14 @@ try {
 
     echo $application->handle()->getContent();
 
-} catch (Phalcon\Exception $e) {
+} catch (\Exception $e) {
     if($application->getDI()->get('config')->environment->type != 'prod') {
         var_dump($e);
-    }
-} catch (PDOException $e) {
-    if($application->getDI()->get('config')->environment->type != 'prod') {
-        var_dump($e);
+    } else {
+        $application->getDI()->get('logger')->log($e->getMessage(), \Phalcon\Logger::ERROR);
+        $response =  $application->getDI()->get('response');
+        $response->setStatusCode(500 , "Internal Server Error");
+        $response->setContent("500 Internal Server Error");
+        $response->send();
     }
 }
