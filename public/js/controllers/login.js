@@ -17,8 +17,6 @@ angular.module('fh.controllers').controller('LoginController', ['$scope', '$http
 
         $scope.loading.login = true;
 
-        console.log($scope.login);
-
         $http.post('/auth/login', $scope.login)
             .success(function (data) {
 

@@ -1,5 +1,6 @@
 <?php
 namespace FH\Lib;
+use FH\Models\LoginAttempt;
 use Phalcon\Mvc\User\Component;
 use FH\Models\User;
 /**
@@ -67,6 +68,66 @@ class Auth extends Component
         return null;
     }
 
+
+    /**
+     * Add LoginAttempt
+     * @return LoginAttempt
+     */
+    public function addLoginAttempt()
+    {
+        $attempt = $this->getLoginAttempt();
+
+        if (!empty($attempt)) {
+            $attempt->attempt++;
+            $attempt->date = new \DateTime();
+            $attempt->save();
+
+            return $attempt;
+        }
+        $attempt = new LoginAttempt();
+        $attempt->ip = $this->request->getClientAddress();;
+        $attempt->attempt = 1;
+        $attempt->date = new \DateTime();
+        $attempt->save();
+
+        return $attempt;
+    }
+
+    /**
+     * Return LoginAttempt entry by IP
+     * @param int $max
+     * @return LoginAttempt
+     */
+    public function getLoginAttempt($max = 0)
+    {
+        $bind = ['ip' => $this->request->getClientAddress(), 'active' => true];
+        $attemptSql = '';
+
+        if ($max) {
+            $bind['attempt'] = $max;
+            $attemptSql = ' AND attempt >= :attempt:';
+        }
+        return LoginAttempt::findFirst([
+            'conditions' => " ip = :ip: AND active = :active:" . $attemptSql,
+            'bind' => $bind
+        ]);
+    }
+
+    /**
+     * Remove  LoginAttempt entry by IP
+     * @return bool
+     */
+    public function removeLoginAttempt()
+    {
+        $attempt = $this->getLoginAttempt();
+
+        if (!empty($attempt)) {
+            return $attempt->delete();
+        }
+
+        return false;
+    }
+
     /**
      * Check user credentials
      * @param string $email
@@ -86,13 +147,27 @@ class Auth extends Component
             'bind' => ['email' => $email, 'active' => true]
         ]);
 
+        $config = $this->di->get('config');
+        $attempt = $this->getLoginAttempt($config->auth->maxLoginAttempts);
+        if (!empty($attempt)) {
+            $date = clone $attempt->date;
+            $date->modify($config->auth->loginAttemptsBlockDuration);
+
+            if (new \DateTime() <= $date) {
+                throw new Exception('Access denied for ' . $config->auth->loginAttemptsBlockDuration);
+            }
+            $this->removeLoginAttempt();
+        }
+
         // Check if the user exist
         if (empty($user)) {
+            $this->addLoginAttempt();
             throw new Exception('User with email ' . $email . ' not found');
         }
 
         // Check user password
         if (!password_verify($password, $user->password)) {
+            $this->addLoginAttempt();
             throw new Exception('Wrong password for user with email ' . $email);
         }
 
@@ -107,6 +182,8 @@ class Auth extends Component
      */
     public function login(User $user, $remember = false)
     {
+        $this->removeLoginAttempt();
+
         $this->setSession($user);
         if ($remember) {
             $user = $this->setCookie($user);

@@ -59,6 +59,10 @@ class UserController extends ControllerBase
             $user->setPassword($data['password']);
         }
         if ($user->save()) {
+
+            if (!empty($data['password'])) {
+                $this->di->get('mail')->send($user->email, 'New password: ' . $data['password']);
+            }
             return $this->jsonResponse([
                'success' => true
             ]);

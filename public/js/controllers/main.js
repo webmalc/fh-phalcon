@@ -4,7 +4,6 @@ angular.module('fh.controllers').controller('MainController', ['$scope' , 'User'
 
     User.getLogged({}, function (user) {
         $scope.user = user;
-        console.log(user);
     }, function() {
         $scope.alert = {
             type: 'danger',

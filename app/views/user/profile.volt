@@ -32,7 +32,7 @@
                 <tr>
                     <td class="tr-sm vertical-middle">Password:</td>
                     <td>
-                        <a href="#" editable-text="user.password" e-type="password" e-required onbeforesave="updateUserProperty($data, 'password')">
+                        <a href="#" editable-text="user.password" e-type="password" e-pattern=".{6,}" e-title="6 characters minimum" e-required onbeforesave="updateUserProperty($data, 'password')">
                             {[{ user.password || 'new password' }]}
                         </a>
                     </td>

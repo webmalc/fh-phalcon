@@ -52,6 +52,9 @@ class Acl extends Component
         self::ROLE_USER_NAME => [
             'index' => ['index'],
             'user' => ['profile']
+        ],
+        self::ROLE_ADMIN_NAME => [
+            'user' => ['index', 'new', 'create']
         ]
     ];
 
