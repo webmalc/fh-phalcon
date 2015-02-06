@@ -1,5 +1,11 @@
-#user-gravatar-link
-{
-  padding: 5px 15px;
+#user-gravatar-link {
+  padding: 17px 5px 0px 0px;
   margin: 0px;
+}
+#navbar-logo {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin-top: -4px;
+  margin-right: 5px;
 }

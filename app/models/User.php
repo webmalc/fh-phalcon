@@ -88,7 +88,7 @@ class User extends Base
 
         // Set user role
         if (empty($this->roles)) {
-            $this->roles = [Acl::ROLE_USER_NAME];
+            $this->roles = 'user';
         }
 
         parent::beforeSave();
@@ -152,5 +152,15 @@ class User extends Base
             'messageMinimum' => 'Password is too short. Minimum 6 characters',
         ]));
         return $this->validationHasFailed() != true;
+    }
+
+    /**
+     * Check user role
+     * @param $role
+     * @return bool
+     */
+    public function hasRole($role)
+    {
+        return in_array($role, $this->roles);
     }
 }

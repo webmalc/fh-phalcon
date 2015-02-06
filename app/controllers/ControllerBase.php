@@ -2,6 +2,7 @@
 namespace FH\Controllers;
 
 use FH\Lib\Exception;
+use Phalcon\Http\Response;
 use Phalcon\Mvc\Controller;
 use \Phalcon\Mvc\Dispatcher;
 
@@ -16,8 +17,8 @@ class ControllerBase extends Controller
 
     /**
      * Execute before the router
-     * @param \Phalcon\Mvc\Dispatcher $dispatcher
-     * @return boolean
+     * @param Dispatcher $dispatcher
+     * @return bool|\Phalcon\Http\ResponseInterface
      */
     public function beforeExecuteRoute(Dispatcher $dispatcher)
     {
@@ -33,7 +34,7 @@ class ControllerBase extends Controller
             }
             // if user not allowed to controller/action
             if(!$this->di->get('acl')->isAllowed($user, $controllerName, $actionName)) {
-                return $this->response->redirect('user/login');
+                return $this->error404();
             }
         }
         return true;

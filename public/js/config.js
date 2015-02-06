@@ -18,6 +18,14 @@ angular.module('fh')
                     templateUrl: 'user/profile',
                     controller: 'ProfileController'
                 }).
+                when('/user', {
+                    templateUrl: 'user',
+                    controller: 'UserController'
+                }).
+                when('/user/new', {
+                    templateUrl: 'user/new',
+                    controller: 'UserController'
+                }).
                 when('/finances', {
                     templateUrl: 'finances',
                     controller: 'FinancesController'
@@ -42,8 +50,8 @@ angular.module('fh')
 
             //xeditable
             editableOptions.theme = 'bs3';
-            editableThemes.bs3.inputClass = 'input-sm';
-            editableThemes.bs3.buttonsClass = 'btn-sm';
+            //editableThemes.bs3.inputClass = 'input-sm';
+            //editableThemes.bs3.buttonsClass = 'btn-sm';
 
             //routing
             $rootScope.config = {};

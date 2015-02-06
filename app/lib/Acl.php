@@ -14,18 +14,6 @@ use FH\Models\User;
 class Acl extends Component
 {
     /**
-     * User role name
-     * @const USER_ROLE_NAME
-     */
-    const ROLE_USER_NAME = 'user';
-
-    /**
-     * Admin role name
-     * @const ADMIN_ROLE_NAME
-     */
-    const ROLE_ADMIN_NAME = 'admin';
-
-    /**
      * The ACL Object
      * @var \Phalcon\Acl\Adapter\Memory
      */
@@ -45,18 +33,20 @@ class Acl extends Component
 
 
     /**
-     * Protected controllers
-     * @var array
+     * Check user role
+     * @param string $role
+     * @return bool
      */
-    private $protectedControllers = [
-        self::ROLE_USER_NAME => [
-            'index' => ['index'],
-            'user' => ['profile']
-        ],
-        self::ROLE_ADMIN_NAME => [
-            'user' => ['index', 'new', 'create']
-        ]
-    ];
+    public function hasRole($role)
+    {
+        $user = $this->di->get('auth')->getUser();
+
+        if (empty($user)) {
+            return false;
+        }
+
+        return $user->hasRole($role);
+    }
 
     /**
      * Constructor
@@ -65,6 +55,7 @@ class Acl extends Component
      */
     public function __construct($path, $apc)
     {
+        $this->protectedControllers = $this->di->get('security');
         $this->filePath = $path;
         $this->apcName = $apc;
     }
@@ -79,7 +70,7 @@ class Acl extends Component
     {
         foreach ($this->protectedControllers as $entry) {
             foreach ($entry as $controllerName => $actions) {
-                if ($controller == $controllerName && in_array($action, $actions)) {
+                if ($controller == $controllerName && (in_array($action, $actions) ||  in_array('*', $actions))) {
                     return true;
                 }
             }
@@ -144,14 +135,14 @@ class Acl extends Component
         $acl->setDefaultAction(\Phalcon\Acl::DENY);
 
         // Add roles
-        $roleAdmin = new AclRole(self::ROLE_ADMIN_NAME);
-        $roleUser = new AclRole(self::ROLE_USER_NAME);
-
+        $roleAdmin = new AclRole('admin');
+        $roleUser = new AclRole('user');
         $acl->addRole($roleUser);
         $acl->addRole($roleAdmin, $roleUser);
 
         // Add resources
         foreach ($this->protectedControllers as $role => $entry) {
+
             foreach ($entry as $controllerName => $actions) {
 
                 $acl->addResource(new AclResource($controllerName), $actions);
@@ -190,6 +181,10 @@ class Acl extends Component
             return false;
         }
         foreach ($user->roles as $role) {
+            if ($this->getAcl()->isAllowed($role, $controller, '*')) {
+                return true;
+            }
+
             if ($this->getAcl()->isAllowed($role, $controller, $action)) {
                 return true;
             }

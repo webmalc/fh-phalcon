@@ -5,10 +5,8 @@
 </head>
 <body>
 
-<div id="main-container" class="container main-container">
-    <div class="row">
-        <div class="col-md-4 col-md-offset-4">
-            <div class="panel panel-default">
+<div id="main-container" class="container-fluid main-container">
+            <div class="panel panel-primary" id="login-panel">
                 <div class="panel-heading">
                     <h3 class="panel-title">Sign in to FamilyHelper </h3>
                 </div>
@@ -44,12 +42,12 @@
                             </div>
                             <div class="checkbox">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-xs-6">
                                         <label><input type="checkbox" ng-init="login.remember = true"
                                                       name="_remember_me" ng-model="login.remember" value="on" checked>
                                             remember me?</label>
                                     </div>
-                                    <div class="col-md-6 text-right">
+                                    <div class="col-xs-6 text-right">
                                         <a href ng-click="form.password = true; error = ''">forgot password?</a>
                                     </div>
                                 </div>
@@ -74,7 +72,7 @@
                             </div>
                             <div class="checkbox">
                                 <div class="row">
-                                    <div class="col-md-12 text-right">
+                                    <div class="col-xs-12 text-right">
                                         <a href ng-click="form.password = false; error = ''">cancel</a>
                                     </div>
                                 </div>
@@ -92,8 +90,6 @@
 
                 </div>
             </div>
-        </div>
-    </div>
 </div>
 
 {% include 'partials/scripts.volt' %}

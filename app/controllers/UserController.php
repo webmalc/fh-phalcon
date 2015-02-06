@@ -74,4 +74,13 @@ class UserController extends ControllerBase
         }
 
     }
+
+    /**
+     * User list action
+     * @return \Phalcon\Http\Response
+     */
+    public function indexAction()
+    {
+
+    }
 }

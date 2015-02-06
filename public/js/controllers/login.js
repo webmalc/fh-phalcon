@@ -4,6 +4,12 @@ angular.module('fh.controllers').controller('LoginController', ['$scope', '$http
 
     var email = $location.search().email;
 
+    // Browser remember login/password bug fix
+    $scope.login = {
+        email: $('input[name="email"]').val(),
+        password: $('input[name="password"]').val()
+    };
+
     if (email) {
         $scope.login.email = email;
     }

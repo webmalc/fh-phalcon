@@ -1,6 +1,5 @@
 body {
-  padding-top: 50px;
-  padding-bottom: 50px;
+  padding: 80px 0px;
 }
 h3 a,
 h3 a:hover,
@@ -15,8 +14,8 @@ h3 a:hover {
 .without-padding-left {
   padding-left: 0px;
 }
-#main-header {
-  margin-bottom: 30px;
+#main-breadcrumb {
+  margin-bottom: 20px;
 }
 .img-rounded {
   border-radius: 6px;
@@ -45,13 +44,6 @@ h3 a:hover {
   text-align: center;
   color: #000;
 }
-.input-xs {
-  height: 26px;
-  padding: 8px 12px;
-  font-size: 12px;
-  line-height: 1.5;
-  border-radius: 0;
-}
 .editable-empty,
 .editable-empty:hover,
 .editable-empty:focus,
@@ -68,4 +60,21 @@ a.editable-empty:focus {
 }
 .tr-sm {
   width: 100px;
+}
+/** FORMS **/
+.has-error .input-group-addon {
+  border: 0px;
+  background-color: transparent;
+}
+.input-xs {
+  height: 26px;
+  padding: 8px 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 0;
+}
+/** LOGIN **/
+#login-panel {
+  max-width: 400px;
+  margin: 0 auto;
 }

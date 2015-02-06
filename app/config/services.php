@@ -20,6 +20,22 @@ $di = new FactoryDefault();
 $di->set('config', $config);
 
 /**
+ * Security config service
+ */
+$di->set('security', function()  use ($config) {
+    $ini =  new \Phalcon\Config\Adapter\Ini($config->application->securityPath);
+    $result = [];
+    foreach ($ini->toArray() as $role => $controllers) {
+        foreach ($controllers as $controller => $methods) {
+            $result[$role][$controller] = explode(',', str_replace(' ', '', $methods));
+        }
+    }
+
+    return $result;
+
+});
+
+/**
  * The URL component is used to generate all kind of urls in the application
  */
 $di->set('url', function () use ($config) {

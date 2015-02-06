@@ -6,7 +6,7 @@
 	<body ng-controller="MainController">
 		{% block navbar %}{% endblock %}
 
-		<div id="main-container" class="container main-container">
+		<div id="main-container" class="container-fluid main-container">
 			{% block content %}{% endblock %}
 		</div>
 
