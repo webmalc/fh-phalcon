@@ -29,3 +29,15 @@
   -o-animation: flipInX 0.5s;
   animation: flipInX 0.5s;
 }
+.tab-content > .tab-pane {
+  -webkit-animation: bounceInRight 0.5s;
+  -moz-animation: bounceInRight 0.5s;
+  -o-animation: bounceInRight 0.5s;
+  animation: bounceInRight 0.5s;
+}
+.tab-content > .tab-pane.active-add {
+  -webkit-animation: bounceOutLeft 0.2s;
+  -moz-animation: bounceOutLeft 0.2s;
+  -o-animation: bounceOutLeft 0.2s;
+  animation: bounceOutLeft 0.2s;
+}
