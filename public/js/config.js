@@ -50,8 +50,8 @@ angular.module('fh')
 
             //xeditable
             editableOptions.theme = 'bs3';
-            //editableThemes.bs3.inputClass = 'input-sm';
-            //editableThemes.bs3.buttonsClass = 'btn-sm';
+            editableThemes['bs3'].submitTpl = '<button type="submit" class="btn btn-primary"><i class="fa fa-check"></i></button>';
+            editableThemes['bs3'].cancelTpl = '<button type="button" class="btn btn-default" ng-click="$form.$cancel()"><i class="fa fa-times"></i></button>';
 
             //routing
             $rootScope.config = {};

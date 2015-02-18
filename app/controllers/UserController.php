@@ -81,6 +81,6 @@ class UserController extends ControllerBase
      */
     public function indexAction()
     {
-
+        $this->view->setVar("security", $this->di->get('security'));
     }
 }

@@ -8,3 +8,4 @@
 /vendor/
 /app/config/config.ini
 /public/js/bower_components
+/nbproject
