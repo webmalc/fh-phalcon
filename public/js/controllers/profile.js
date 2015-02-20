@@ -10,9 +10,9 @@ angular.module('fh.controllers').controller('ProfileController', ['$scope', '$q'
         user[property] = value;
         User.saveLogged(user, function(data) {
             if (data.success) {
-                q.resolve()
+                q.resolve();
             } else {
-                q.resolve(data.message)
+                q.resolve(data.message);
             }
         }, function(data) {
             q.reject('Server error! Please reload the page (F5).');

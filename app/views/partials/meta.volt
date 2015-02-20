@@ -5,7 +5,7 @@
 <meta name="keywords" content="FamilyHelper">
 <meta name="author" content="webmalc@gmail.com">
 <meta name="description" content="Family finance management program">
-<link rel="icon" type="image/png" href="/img/favicon_16x16?v=0">
+<link rel="icon" type="image/png" href="/img/favicon_16x16.png?v=1">
 <title>{% block title %}FamilyHelper{% endblock %}</title>
 {% block css %}
     {{ assets.outputCss('cdnCss') }}

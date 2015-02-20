@@ -1,6 +1,9 @@
 <?php
 namespace FH\Controllers;
 
+use FH\Models\User;
+use Phalcon\Http\Response;
+
 /**
  * Users controller class
  */
@@ -8,7 +11,7 @@ class UserController extends ControllerBase
 {
     /**
      * Login form action
-     * @return \Phalcon\Http\Response
+     * @return Response
      */
     public function loginAction()
     {
@@ -19,7 +22,7 @@ class UserController extends ControllerBase
 
     /**
      * Profile action
-     * @return \Phalcon\Http\Response
+     * @return Response
      */
     public function profileAction()
     {
@@ -28,7 +31,7 @@ class UserController extends ControllerBase
 
     /**
      * Returns current user as JSON
-     * @return \Phalcon\Http\Response
+     * @return Response
      */
     public function loggedAction()
     {
@@ -44,7 +47,7 @@ class UserController extends ControllerBase
 
     /**
      * Save current user
-     * @return \Phalcon\Http\Response
+     * @return Response
      */
     public function loggedSaveAction()
     {
@@ -77,10 +80,45 @@ class UserController extends ControllerBase
 
     /**
      * User list action
-     * @return \Phalcon\Http\Response
+     * @return Response
      */
     public function indexAction()
     {
         $this->view->setVar("security", $this->di->get('security'));
     }
+    
+    /**
+     * User new action
+     * @return Response
+     */
+    public function newAction()
+    {
+        $data = $this->jsonRequest('post');
+        
+        if (empty($data)) {
+            return $this->error404();
+        }
+        
+        $user = new User;
+        $user->setData($data);
+        $user->roles = empty($data['roles']) ? null: [$data['roles']];
+        $password = $this->di->get('helper')->getToken(6, true, 'lud');
+        $user->setPassword($password);
+        
+        if ($user->save()) {
+
+            $this->di->get('mail')->send($user->email, 'New password: ' . $password);
+            
+            return $this->jsonResponse([
+               'success' => true,
+               'message' => 'The user ' . $user->email . ' was successfully created! ' . 
+               'Password: ' . $password
+            ]);
+        } else {
+            return $this->jsonResponse([
+                'success' => false,
+                'message' => implode('; ', $user->getMessages())
+            ]);
+        }
+    }        
 }

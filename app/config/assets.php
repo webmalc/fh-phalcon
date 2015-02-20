@@ -50,6 +50,7 @@ $di->get('assets')
     ->addJs('js/controllers/login.js')
     ->addJs('js/controllers/profile.js')
     ->addJs('js/controllers/user.js')
+    ->addJs('js/controllers/finances.js')    
     ->join(true)
     ->addFilter(new \Phalcon\Assets\Filters\Jsmin())
 ;
