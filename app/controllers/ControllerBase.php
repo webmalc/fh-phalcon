@@ -58,6 +58,10 @@ class ControllerBase extends Controller
     public function jsonResponse($data)
     {
         $this->response->setContentType('application/json', 'UTF-8');
+        if ($data instanceof \Traversable) {
+            $data = iterator_to_array($data);
+        }
+        
         $this->response->setContent(json_encode($data));
         return $this->response;
     }
@@ -82,12 +86,18 @@ class ControllerBase extends Controller
             return null;
         }
         $data = json_decode($this->request->getRawBody(), true);
+        var_dump($data);
         if (empty($data)) {
             return null;
         }
         if (!empty($filter)) {
             $data = array_map('trim', $data);
             $data = filter_var_array($data, $filter);
+            foreach ($data as $key => $value) {
+                if (empty($value)) {
+                    $data[$key] = false;
+                } 
+            }
         }
         return $data;
     }

@@ -57,7 +57,7 @@
                                         class="btn btn-success btn-block">
                                     <span ng-cloak ng-init="loading.login = false" ng-show="loading.login"><i
                                                 class="fa fa-spinner fa-spin fa-lg"></i> </span>
-                                    Login
+                                    <i ng-show="!loading.login" class="fa fa-check"></i> Login
                                 </button>
                             </div>
                         </form>
@@ -82,7 +82,7 @@
                                         class="btn btn-success btn-block">
                                     <span ng-cloak ng-init="loading.password = false" ng-show="loading.password"><i
                                                 class="fa fa-spinner fa-spin fa-lg"></i> </span>
-                                    Send password
+                                    <i ng-show="!loading.login" class="fa fa-check"></i> Send password
                                 </button>
                             </div>
                         </form>

@@ -9,6 +9,7 @@ angular.module('fh', [
     'ngAnimate',
     'ui.bootstrap',
     'xeditable',
+    'smart-table',
     'fh.directives',
     'fh.services',
     'fh.controllers'

@@ -1,9 +1,9 @@
 <?php
 namespace FH\Models;
 
-use \FH\Lib\Acl;
 use FH\Validators\Uniqueness as UniquenessValidator;
 use Phalcon\Mvc\Model\Validator\Email as EmailValidator;
+use Phalcon\Mvc\Model\Validator\PresenceOf as PresenceOfValidator;
 use Phalcon\Mvc\Model\Validator\StringLength as StringLengthValidator;
 
 /**
@@ -135,9 +135,14 @@ class User extends Base
         ]));
 
         //email
+        $this->validate(new PresenceOfValidator([
+            'field' => 'email',
+            'message' => 'The e-mail is required'
+        ]));
+        
         $this->validate(new EmailValidator([
             'field' => 'email',
-            'message' => 'E-mail is incorrect'
+            'message' => 'The e-mail is not valid'
         ]));
 
         $this->validate(new UniquenessValidator([

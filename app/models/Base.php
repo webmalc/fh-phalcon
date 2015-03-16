@@ -72,6 +72,9 @@ class Base extends Model implements \JsonSerializable
         foreach ($reflect->getProperties(\ReflectionProperty::IS_PUBLIC) as $prop) {
             $propName = $prop->getName();
             $value = $this->$propName;
+            if ($value instanceof \DateTime) {
+                $value = $value->format('U') * 1000;
+            }
             $result[$propName] = $value;
         }
         return $result;
@@ -198,6 +201,6 @@ class Base extends Model implements \JsonSerializable
     public function beforeDelete()
     {
         // Create log
-        $this->getDI()->get('logger')->log('Deleted entry with classFget ' . get_class($this) . ' and id #' . $this->id, Logger::INFO);
+        $this->getDI()->get('logger')->log('Deleted entry with class ' . get_class($this) . ' and id #' . $this->id, Logger::INFO);
     }
 }

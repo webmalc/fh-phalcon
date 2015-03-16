@@ -1,10 +1,13 @@
 angular.module('fh.services')
     .factory('User', ['$resource',
         function($resource){
-            return $resource('user/:userId', {}, {
-                'getLogged': {method:'GET', params: {userId: 'logged'}},
-                'saveLogged': {method:'POST', params: {userId: 'loggedsave'}},
-                'new': {method:'POST', params: {userId: 'new'}},
+            return $resource('user/:id', {}, {
+                'getLogged': {method:'GET', params: {id: 'logged'}},
+                'saveLogged': {method:'POST', params: {id: 'loggedsave'}},
+                'new': {method:'POST', params: {id: 'new'}},
+                'query': {method:'GET', params: {id: 'list'}, isArray: true},
+                'save': {method:'POST', params: {id: 'save'}},
+                'delete': {method:'POST', params: {id: 'delete'}}
             });
         }
     ]);

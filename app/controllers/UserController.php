@@ -77,9 +77,73 @@ class UserController extends ControllerBase
         }
 
     }
+    
+    /**
+     * Save user
+     * @return Response
+     */
+    public function saveAction()
+    {
+        $data = $this->jsonRequest('post');
+        if (empty($data['id'])) {
+            return $this->error404();
+        }
+        $user = User::findFirst($data['id']);
+        if (empty($user)) {
+            return $this->error404();
+        }
+        $user->setData($data);
+        if (!empty($data['role'])) {
+           $user->roles = [$data['role']];
+        }
+        if ($user->save()) {
+            return $this->jsonResponse([
+               'success' => true
+            ]);
+        } else {
+            return $this->jsonResponse([
+                'success' => false,
+                'message' => implode('; ', $user->getMessages())
+            ]);
+        }
+    }
+    
+    /**
+     * Delete user
+     * @return Response
+     */
+    public function deleteAction()
+    {
+        $data = $this->jsonRequest('post');
+        if (empty($data['id'])) {
+            return $this->error404();
+        }
+        $user = User::findFirst($data['id']);
+        if (empty($user)) {
+            return $this->error404();
+        }
+        $user->delete();
+        
+        return $this->jsonResponse([
+            'success' => true
+        ]);
+    }        
 
     /**
-     * User list action
+     * User list tpl
+     * @return Response
+     */
+    public function listAction()
+    {
+        $this->onlyAjax();
+
+        return $this->jsonResponse(
+            User::find(['order' => 'createdAt DESC'])
+        );
+    }
+    
+    /**
+     * User list 
      * @return Response
      */
     public function indexAction()

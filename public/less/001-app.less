@@ -61,10 +61,35 @@ a.editable-empty:hover, a.editable-empty:focus {
 .vertical-middle {
   vertical-align: middle !important;
 }
-.tr-sm {
+.tr-l {
+  width: 300px;
+}
+.tr-md, .tr-m {
+  width: 200px;
+}
+.tr-sm, .tr-s {
   width: 100px;
 }
-
+.tr-xxs {
+  width: 50px;
+}
+.tr-xs {
+  width: 75px;
+}
+.table {
+    td {
+        vertical-align: middle !important;  
+    }
+}
+th[st-sort] {
+    cursor: pointer;
+}
+th.st-sort-descent::after {
+    content: " ▼";
+}
+th.st-sort-ascent::after {
+    content: " ▲";
+}
 /** FORMS **/
 .has-error {
   .input-group-addon {
