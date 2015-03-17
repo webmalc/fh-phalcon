@@ -9,4 +9,5 @@
 /app/config/config.ini
 /public/js/bower_components
 /nbproject
+/scripts/sql/data.sql
 *.map
