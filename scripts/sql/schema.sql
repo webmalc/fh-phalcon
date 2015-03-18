@@ -11,16 +11,21 @@ SET client_min_messages = warning;
 
 SET search_path = public, pg_catalog;
 
+ALTER TABLE ONLY public.finance DROP CONSTRAINT finance_user_fkey;
 DROP INDEX public.unique_ip;
 DROP INDEX public.unique_email;
 ALTER TABLE ONLY public."user" DROP CONSTRAINT user_pkey;
 ALTER TABLE ONLY public.login_attempt DROP CONSTRAINT login_attempt_pkey;
+ALTER TABLE ONLY public.finance DROP CONSTRAINT finance_pkey;
 ALTER TABLE public."user" ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.login_attempt ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.finance ALTER COLUMN id DROP DEFAULT;
 DROP SEQUENCE public.user_id_seq;
 DROP TABLE public."user";
 DROP SEQUENCE public.login_attempt_id_seq;
 DROP TABLE public.login_attempt;
+DROP SEQUENCE public.finance_id_seq;
+DROP TABLE public.finance;
 DROP EXTENSION plpgsql;
 DROP SCHEMA public;
 --
@@ -65,6 +70,46 @@ SET search_path = public, pg_catalog;
 SET default_tablespace = '';
 
 SET default_with_oids = false;
+
+--
+-- Name: finance; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE finance (
+    id integer NOT NULL,
+    tags character varying(100)[] NOT NULL,
+    price numeric NOT NULL,
+    date timestamp without time zone,
+    "user" integer NOT NULL,
+    incoming boolean DEFAULT false NOT NULL,
+    active boolean NOT NULL,
+    "createdAt" timestamp without time zone,
+    "updatedAt" timestamp without time zone
+);
+
+
+ALTER TABLE finance OWNER TO postgres;
+
+--
+-- Name: finance_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE finance_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE finance_id_seq OWNER TO postgres;
+
+--
+-- Name: finance_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE finance_id_seq OWNED BY finance.id;
+
 
 --
 -- Name: login_attempt; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
@@ -150,6 +195,13 @@ ALTER SEQUENCE user_id_seq OWNED BY "user".id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
+ALTER TABLE ONLY finance ALTER COLUMN id SET DEFAULT nextval('finance_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
 ALTER TABLE ONLY login_attempt ALTER COLUMN id SET DEFAULT nextval('login_attempt_id_seq'::regclass);
 
 
@@ -158,6 +210,14 @@ ALTER TABLE ONLY login_attempt ALTER COLUMN id SET DEFAULT nextval('login_attemp
 --
 
 ALTER TABLE ONLY "user" ALTER COLUMN id SET DEFAULT nextval('user_id_seq'::regclass);
+
+
+--
+-- Name: finance_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY finance
+    ADD CONSTRAINT finance_pkey PRIMARY KEY (id);
 
 
 --
@@ -188,6 +248,14 @@ CREATE UNIQUE INDEX unique_email ON "user" USING btree (email);
 --
 
 CREATE UNIQUE INDEX unique_ip ON login_attempt USING btree (ip);
+
+
+--
+-- Name: finance_user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY finance
+    ADD CONSTRAINT finance_user_fkey FOREIGN KEY ("user") REFERENCES "user"(id);
 
 
 --

@@ -25,10 +25,10 @@ if [[ $1 == 'restore' ]]; then
 fi
 
 if [[ $1 == 'data' ]]; then
-    echo -e "${GREEN}Dump postgresql schema & data dump${NC}"
+    echo -e "${GREEN}Dump postgresql schema & data${NC}"
     pg_dump -U $USER --clean $DB > $DUMP_DATA
     exit
 fi
 
-echo -e "${GREEN}Dump postgresql schema dump${NC}"
+echo -e "${GREEN}Dump postgresql schema${NC}"
 pg_dump -U $USER --schema-only --clean $DB > $DUMP_SCHEMA
