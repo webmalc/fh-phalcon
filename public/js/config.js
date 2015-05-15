@@ -1,4 +1,4 @@
-'use strict';
+/*global window, angular*/
 
 angular.module('fh')
     .config([
@@ -18,12 +18,8 @@ angular.module('fh')
                     templateUrl: 'user/profile',
                     controller: 'ProfileController'
                 }).
-                when('/user', {
+                when('/admin/user', {
                     templateUrl: 'user',
-                    controller: 'UserController'
-                }).
-                when('/user/new', {
-                    templateUrl: 'user/new',
                     controller: 'UserController'
                 }).
                 when('/finances', {

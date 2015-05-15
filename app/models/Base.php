@@ -85,7 +85,9 @@ class Base extends Model implements \JsonSerializable
      */
     public function beforeCreate()
     {
-        $this->createdAt = $this->convertDate(new \DateTime());
+        if (empty($this->createdAt)) {
+            $this->createdAt = $this->convertDate(new \DateTime());
+        }
     }
 
     /**
@@ -93,7 +95,9 @@ class Base extends Model implements \JsonSerializable
      */
     public function beforeUpdate()
     {
-        $this->updatedAt = $this->convertDate(new \DateTime());
+        if (empty($this->updatedAt)) {
+            $this->updatedAt = $this->convertDate(new \DateTime());
+        }
     }
 
     /**

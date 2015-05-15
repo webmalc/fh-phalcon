@@ -17,6 +17,8 @@
   ],
   "dependencies": {
     "autofill-event": "~1.0.0",
-    "angular-xeditable": "~0.1.8"
+    "angular-xeditable": "~0.1.8",
+    "ng-tags-input": "~2.2.0",
+    "angular-smart-table": "~2.0.1"
   }
 }

@@ -1,4 +1,4 @@
-'use strict';
+/*global window, angular*/
 
 angular.module('fh.directives', []);
 angular.module('fh.services', []);
@@ -9,6 +9,7 @@ angular.module('fh', [
     'ngAnimate',
     'ui.bootstrap',
     'xeditable',
+    'ngTagsInput',
     'smart-table',
     'fh.directives',
     'fh.services',

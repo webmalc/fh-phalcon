@@ -15,12 +15,12 @@
         <div class="navbar-collapse collapse navbar-responsive-collapse" id="navbar-main" collapse="navCollapsed">
 
             <ul class="nav navbar-nav">
-                <li><a href="{{ url('#/finances') }}"><i class="fa fa-dollar"></i> Finances</a></li>
+                <li ng-class="{ active: navbarIsActive('#/finances', true)}"><a href="{{ url('#/finances') }}"><i class="fa fa-dollar"></i> Finances</a></li>
                 {% if acl.hasRole('admin') %}
-                <li class="dropdown" dropdown>
+                <li ng-class="{ active: navbarIsActive('#/admin')}" class="dropdown" dropdown>
                     <a href="#" class="dropdown-toggle"  dropdown-toggle ng-cloak><i class="fa fa-cogs"></i> Administration</a>
                     <ul class="dropdown-menu" aria-labelledby="administration">
-                        <li><a href="{{ url('#/user') }}"><i class="fa fa-user"></i> User</a></li>
+                        <li><a href="{{ url('#/admin/user') }}"><i class="fa fa-user"></i> User</a></li>
                     </ul>
                 </li>
                 {% endif %}
@@ -33,7 +33,7 @@
                             <img src="{{ helper.gravatar(auth.getUser().email) }}" alt="{{ auth.getUser().email }} gravatar" class="img-rounded">
                         </a>
                     </li>
-                    <li class="dropdown" dropdown id="user-menu">
+                    <li ng-class="{ active: navbarIsActive('#/user/profile')}" class="dropdown" dropdown id="user-menu">
                         <a href="#" class="dropdown-toggle"  dropdown-toggle ng-cloak>Hello, {[{ user.name || user.email }]} <span class="caret"></span></a>
                         <ul class="dropdown-menu" aria-labelledby="user">
                             <li><a href="{{ url('#/user/profile') }}"><i class="fa fa-user"></i> Profile</a></li>

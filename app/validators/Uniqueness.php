@@ -4,6 +4,7 @@ namespace FH\Validators;
 
 use Phalcon\Mvc\Model\Validator;
 use Phalcon\Mvc\Model\ValidatorInterface;
+use Phalcon\Mvc\ModelInterface;
 
 /**
  * Uniqueness validator
@@ -11,10 +12,10 @@ use Phalcon\Mvc\Model\ValidatorInterface;
 class Uniqueness extends Validator implements ValidatorInterface
 {
     /**
-     * @param \Phalcon\Mvc\Collection $model
+     * @param \Phalcon\Mvc\ModelInterface $model
      * @return boolean
      */
-    public function validate($model)
+    public function validate(ModelInterface $model)
     {
         $field = $this->getOption('field');
         $id = $model->readAttribute('id');

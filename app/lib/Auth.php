@@ -1,8 +1,8 @@
 <?php
 namespace FH\Lib;
-use FH\Models\LoginAttempt;
+use FH\Models\LoginAttempts;
 use Phalcon\Mvc\User\Component;
-use FH\Models\User;
+use FH\Models\Users;
 /**
  * Auth class
  */
@@ -21,7 +21,7 @@ class Auth extends Component
     const AUTH_COOKIE = 'cookie';
 
     /**
-     * @var \FH\Models\User;
+     * @var \FH\Models\Users;
      */
     protected $user = null;
 
@@ -32,8 +32,8 @@ class Auth extends Component
      */
     public function resetPassword($email)
     {
-        /* @var $user \FH\Models\User */
-        $user = User::findFirst([
+        /* @var $user \FH\Models\Users */
+        $user = Users::findFirst([
             'conditions' => " email = :email: AND active = :active:",
             'bind' => ['email' => $email, 'active' => true]
         ]);
@@ -50,13 +50,13 @@ class Auth extends Component
 
     /**
      * Create default user
-     * @return User|null
+     * @return Users|null
      */
     public function defaultUserCreate()
     {
-        if (!User::find()->count()) {
+        if (!Users::find()->count()) {
             $config = $this->di->get('config');
-            $user = new User();
+            $user = new Users();
             $user->setData($config->user->toArray());
             $user->roles = [$config->user->role];
             $user->setPassword($config->user->password);
@@ -70,8 +70,8 @@ class Auth extends Component
 
 
     /**
-     * Add LoginAttempt
-     * @return LoginAttempt
+     * Add LoginAttempts
+     * @return LoginAttempts
      */
     public function addLoginAttempt()
     {
@@ -84,7 +84,7 @@ class Auth extends Component
 
             return $attempt;
         }
-        $attempt = new LoginAttempt();
+        $attempt = new LoginAttempts();
         $attempt->ip = $this->request->getClientAddress();;
         $attempt->attempt = 1;
         $attempt->date = new \DateTime();
@@ -94,9 +94,9 @@ class Auth extends Component
     }
 
     /**
-     * Return LoginAttempt entry by IP
+     * Return LoginAttempts entry by IP
      * @param int $max
-     * @return LoginAttempt
+     * @return LoginAttempts
      */
     public function getLoginAttempt($max = 0)
     {
@@ -107,14 +107,14 @@ class Auth extends Component
             $bind['attempt'] = $max;
             $attemptSql = ' AND attempt >= :attempt:';
         }
-        return LoginAttempt::findFirst([
+        return LoginAttempts::findFirst([
             'conditions' => " ip = :ip: AND active = :active:" . $attemptSql,
             'bind' => $bind
         ]);
     }
 
     /**
-     * Remove  LoginAttempt entry by IP
+     * Remove  LoginAttempts entry by IP
      * @return bool
      */
     public function removeLoginAttempt()
@@ -133,7 +133,7 @@ class Auth extends Component
      * @param string $email
      * @param string $password
      * @param boolean $remember
-     * @return \FH\Models\User
+     * @return \FH\Models\Users
      * @throws \FH\Lib\Exception
      */
     public function check($email, $password, $remember = false)
@@ -141,8 +141,8 @@ class Auth extends Component
         //Create default user
         $this->defaultUserCreate();
 
-        /* @var $user \FH\Models\User */
-        $user = User::findFirst([
+        /* @var $user \FH\Models\Users */
+        $user = Users::findFirst([
             'conditions' => " email = :email: AND active = :active:",
             'bind' => ['email' => $email, 'active' => true]
         ]);
@@ -176,11 +176,11 @@ class Auth extends Component
 
     /**
      * Login user
-     * @param \FH\Models\User $user
+     * @param \FH\Models\Users $user
      * @param boolean $remember
-     * @return \FH\Models\User
+     * @return \FH\Models\Users
      */
-    public function login(User $user, $remember = false)
+    public function login(Users $user, $remember = false)
     {
         $this->removeLoginAttempt();
 
@@ -199,10 +199,10 @@ class Auth extends Component
 
     /**
      * Set auth session
-     * @param \FH\Models\User $user
-     * @return \FH\Models\User
+     * @param \FH\Models\Users $user
+     * @return \FH\Models\Users
      */
-    private function setSession(User $user)
+    private function setSession(Users $user)
     {
         $this->session->set('auth', $user->id);
 
@@ -211,10 +211,10 @@ class Auth extends Component
 
     /**
      * Set auth session
-     * @param \FH\Models\User $user
-     * @return \FH\Models\User
+     * @param \FH\Models\Users $user
+     * @return \FH\Models\Users
      */
-    private function setCookie(User $user)
+    private function setCookie(Users $user)
     {
         $token = $this->di->get('helper')->getToken(40, false, 'lud');
         $this->cookies->set('auth', serialize(['id' => $user->id, 'token' => $token]), time() + 60 * 60 * 24 * 7);
@@ -254,9 +254,9 @@ class Auth extends Component
 
     /**
      * Remove auth session
-     * @param User $user
+     * @param Users $user
      */
-    public function logout(User $user = null)
+    public function logout(Users $user = null)
     {
         if(!$user) {
             $user = $this->getUser();
@@ -273,7 +273,7 @@ class Auth extends Component
     }
     /**
      * Return user instance
-     * @return \FH\Models\User|null
+     * @return \FH\Models\Users|null
      */
     public function getUser()
     {
@@ -285,14 +285,14 @@ class Auth extends Component
             return $this->user;
         }
         if ($type == self::AUTH_SESSION) {
-            /* @var $user \FH\Models\User */
-            $user = User::findFirst($this->session->get('auth'));
+            /* @var $user \FH\Models\Users */
+            $user = Users::findFirst($this->session->get('auth'));
         }
         if ($type == self::AUTH_COOKIE) {
             $cookie = $this->getCookie();
 
-            /* @var $user \FH\Models\User */
-            $user = User::findFirst($cookie['id']);
+            /* @var $user \FH\Models\Users */
+            $user = Users::findFirst($cookie['id']);
             $ip = $this->request->getClientAddress();
             if (empty($user) || !password_verify($cookie['token'], $user->cookie) || $user->cookieIp != $ip) {
                 if ($user) {

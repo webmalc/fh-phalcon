@@ -11,21 +11,20 @@ SET client_min_messages = warning;
 
 SET search_path = public, pg_catalog;
 
-ALTER TABLE ONLY public.finance DROP CONSTRAINT finance_user_fkey;
-DROP INDEX public.unique_ip;
+ALTER TABLE ONLY public.finances DROP CONSTRAINT finances_user_fkey;
 DROP INDEX public.unique_email;
-ALTER TABLE ONLY public."user" DROP CONSTRAINT user_pkey;
-ALTER TABLE ONLY public.login_attempt DROP CONSTRAINT login_attempt_pkey;
-ALTER TABLE ONLY public.finance DROP CONSTRAINT finance_pkey;
-ALTER TABLE public."user" ALTER COLUMN id DROP DEFAULT;
-ALTER TABLE public.login_attempt ALTER COLUMN id DROP DEFAULT;
-ALTER TABLE public.finance ALTER COLUMN id DROP DEFAULT;
-DROP SEQUENCE public.user_id_seq;
-DROP TABLE public."user";
-DROP SEQUENCE public.login_attempt_id_seq;
-DROP TABLE public.login_attempt;
-DROP SEQUENCE public.finance_id_seq;
-DROP TABLE public.finance;
+ALTER TABLE ONLY public.users DROP CONSTRAINT users_pkey;
+ALTER TABLE ONLY public.login_attempts DROP CONSTRAINT login_attempts_pkey;
+ALTER TABLE ONLY public.finances DROP CONSTRAINT finances_pkey;
+ALTER TABLE public.users ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.login_attempts ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.finances ALTER COLUMN id DROP DEFAULT;
+DROP SEQUENCE public.users_id_seq;
+DROP TABLE public.users;
+DROP SEQUENCE public.login_attempts_id_seq;
+DROP TABLE public.login_attempts;
+DROP SEQUENCE public.finances_id_seq;
+DROP TABLE public.finances;
 DROP EXTENSION plpgsql;
 DROP SCHEMA public;
 --
@@ -72,14 +71,13 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: finance; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+-- Name: finances; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
-CREATE TABLE finance (
+CREATE TABLE finances (
     id integer NOT NULL,
     tags character varying(100)[] NOT NULL,
     price numeric NOT NULL,
-    date timestamp without time zone,
     "user" integer NOT NULL,
     incoming boolean DEFAULT false NOT NULL,
     active boolean NOT NULL,
@@ -88,13 +86,13 @@ CREATE TABLE finance (
 );
 
 
-ALTER TABLE finance OWNER TO postgres;
+ALTER TABLE finances OWNER TO postgres;
 
 --
--- Name: finance_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: finances_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE finance_id_seq
+CREATE SEQUENCE finances_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -102,20 +100,20 @@ CREATE SEQUENCE finance_id_seq
     CACHE 1;
 
 
-ALTER TABLE finance_id_seq OWNER TO postgres;
+ALTER TABLE finances_id_seq OWNER TO postgres;
 
 --
--- Name: finance_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: finances_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE finance_id_seq OWNED BY finance.id;
+ALTER SEQUENCE finances_id_seq OWNED BY finances.id;
 
 
 --
--- Name: login_attempt; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+-- Name: login_attempts; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
-CREATE TABLE login_attempt (
+CREATE TABLE login_attempts (
     id integer NOT NULL,
     attempt integer NOT NULL,
     ip inet NOT NULL,
@@ -126,13 +124,13 @@ CREATE TABLE login_attempt (
 );
 
 
-ALTER TABLE login_attempt OWNER TO postgres;
+ALTER TABLE login_attempts OWNER TO postgres;
 
 --
--- Name: login_attempt_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: login_attempts_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE login_attempt_id_seq
+CREATE SEQUENCE login_attempts_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -140,20 +138,20 @@ CREATE SEQUENCE login_attempt_id_seq
     CACHE 1;
 
 
-ALTER TABLE login_attempt_id_seq OWNER TO postgres;
+ALTER TABLE login_attempts_id_seq OWNER TO postgres;
 
 --
--- Name: login_attempt_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: login_attempts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE login_attempt_id_seq OWNED BY login_attempt.id;
+ALTER SEQUENCE login_attempts_id_seq OWNED BY login_attempts.id;
 
 
 --
--- Name: user; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
-CREATE TABLE "user" (
+CREATE TABLE users (
     id integer NOT NULL,
     name character varying(100),
     roles character varying(100)[] NOT NULL,
@@ -168,13 +166,13 @@ CREATE TABLE "user" (
 );
 
 
-ALTER TABLE "user" OWNER TO postgres;
+ALTER TABLE users OWNER TO postgres;
 
 --
--- Name: user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE user_id_seq
+CREATE SEQUENCE users_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -182,80 +180,73 @@ CREATE SEQUENCE user_id_seq
     CACHE 1;
 
 
-ALTER TABLE user_id_seq OWNER TO postgres;
+ALTER TABLE users_id_seq OWNER TO postgres;
 
 --
--- Name: user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE user_id_seq OWNED BY "user".id;
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY finance ALTER COLUMN id SET DEFAULT nextval('finance_id_seq'::regclass);
+ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY login_attempt ALTER COLUMN id SET DEFAULT nextval('login_attempt_id_seq'::regclass);
+ALTER TABLE ONLY finances ALTER COLUMN id SET DEFAULT nextval('finances_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY "user" ALTER COLUMN id SET DEFAULT nextval('user_id_seq'::regclass);
+ALTER TABLE ONLY login_attempts ALTER COLUMN id SET DEFAULT nextval('login_attempts_id_seq'::regclass);
 
 
 --
--- Name: finance_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY finance
-    ADD CONSTRAINT finance_pkey PRIMARY KEY (id);
-
-
---
--- Name: login_attempt_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
---
-
-ALTER TABLE ONLY login_attempt
-    ADD CONSTRAINT login_attempt_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 
 
 --
--- Name: user_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+-- Name: finances_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
-ALTER TABLE ONLY "user"
-    ADD CONSTRAINT user_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY finances
+    ADD CONSTRAINT finances_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: login_attempts_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY login_attempts
+    ADD CONSTRAINT login_attempts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
 
 --
 -- Name: unique_email; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
 --
 
-CREATE UNIQUE INDEX unique_email ON "user" USING btree (email);
+CREATE UNIQUE INDEX unique_email ON users USING btree (email);
 
 
 --
--- Name: unique_ip; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+-- Name: finances_user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-CREATE UNIQUE INDEX unique_ip ON login_attempt USING btree (ip);
-
-
---
--- Name: finance_user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY finance
-    ADD CONSTRAINT finance_user_fkey FOREIGN KEY ("user") REFERENCES "user"(id);
+ALTER TABLE ONLY finances
+    ADD CONSTRAINT finances_user_fkey FOREIGN KEY ("user") REFERENCES users(id);
 
 
 --

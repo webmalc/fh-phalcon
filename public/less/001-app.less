@@ -105,8 +105,27 @@ th.st-sort-ascent::after {
   border-radius: 0;
 }
 .form-sm {
-  input, select {
-    max-width: 400px;
+  input, select, .tags, .host {
+    max-width: 400px !important;
+  }
+  .tags, .host, .tags.focused {
+    border: 0px !important;
+    background-color: transparent !important;;
+    box-shadow: none !important;;
+
+    .tag-item {
+      border-color: #0c84e4;
+      background-color: #2196F3;
+
+      .remove-button {
+        color: #ffffff;
+      }
+    }
+
+    input {
+      background-color: transparent;
+      font-size: 16px;
+    }
   }
 
 }

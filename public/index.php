@@ -6,7 +6,7 @@ try {
     /**
      * Read the configuration
      */
-    $config = new \Phalcon\Config\Adapter\Ini(__DIR__ . "/../app/config/config.ini");
+    $config = new \Phalcon\Config\Adapter\Ini(__DIR__."/../app/config/config.ini");
 
     /**
      * Errors
@@ -19,17 +19,17 @@ try {
     /**
      * Include composer autoload
      */
-    require __DIR__ . '/../vendor/autoload.php';
+    require __DIR__.'/../vendor/autoload.php';
 
     /**
      * Read auto-loader
      */
-    include __DIR__ . "/../app/config/loader.php";
+    include __DIR__."/../app/config/loader.php";
 
     /**
      * Read services
      */
-    include __DIR__ . "/../app/config/services.php";
+    include __DIR__."/../app/config/services.php";
 
     /**
      * Handle the request
@@ -39,19 +39,22 @@ try {
     /**
      * Include assets
      */
-    include __DIR__ . "/../app/config/assets.php";
+    include __DIR__."/../app/config/assets.php";
 
     echo $application->handle()->getContent();
 
 } catch (\Exception $e) {
-    if($application->getDI()->get('config')->environment->type != 'prod') {
-        $response =  $application->getDI()->get('response');
-        $response->setStatusCode(500 , $e->getMessage());
+    if ($application->getDI()->get('config')->environment->type != 'prod') {
+        /** @var Phalcon\Http\Response $response */
+        $response = $application->getDI()->get('response');
+        $response->setStatusCode(500, 'Internal Server Error');
+        $response->setContent(var_dump($e));
         $response->send();
     } else {
         $application->getDI()->get('logger')->log($e->getMessage(), \Phalcon\Logger::ERROR);
-        $response =  $application->getDI()->get('response');
-        $response->setStatusCode(500 , "Internal Server Error");
+        /** @var Phalcon\Http\Response $response */
+        $response = $application->getDI()->get('response');
+        $response->setStatusCode(500, "Internal Server Error");
         $response->setContent("500 Internal Server Error");
         $response->send();
     }

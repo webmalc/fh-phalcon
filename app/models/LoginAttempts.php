@@ -4,9 +4,9 @@ namespace FH\Models;
 use FH\Validators\Uniqueness as UniquenessValidator;
 
 /**
- * LoginAttempt model
+ * LoginAttempts model
  */
-class LoginAttempt extends Base
+class LoginAttempts extends Base
 {
     /**
      * @var int

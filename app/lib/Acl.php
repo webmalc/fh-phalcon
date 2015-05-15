@@ -6,7 +6,7 @@ use Phalcon\Mvc\User\Component;
 use Phalcon\Acl\Adapter\Memory as AclMemory;
 use Phalcon\Acl\Role as AclRole;
 use Phalcon\Acl\Resource as AclResource;
-use FH\Models\User;
+use FH\Models\Users;
 
 /**
  * Acl class
@@ -170,12 +170,12 @@ class Acl extends Component
 
     /**
      * Checks if the current user is allowed to access a resource
-     * @param \FH\Models\User $user
+     * @param \FH\Models\Users $user
      * @param string $controller
      * @param string $action
      * @return boolean
      */
-    public function isAllowed(User $user, $controller, $action)
+    public function isAllowed(Users $user, $controller, $action)
     {
         if (empty($user->roles)) {
             return false;

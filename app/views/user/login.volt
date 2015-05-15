@@ -27,16 +27,16 @@
                             </div>
                             <div class="form-group">
                                 <div class="input-group"
-                                     ng-class="{ 'has-error' : loginForm.email.$invalid && loginForm.email.$dirty && !loginForm.email.$focused }">
+                                     ng-class="{ 'has-error' : loginForm.email.$invalid && loginForm.email.$dirty}">
                                     <span class="input-group-addon"><i class="fa fa-user fa-lg"></i></span>
-                                    <input autofocus type="email" name="email" ng-focus ng-model="login.email"
+                                    <input autofocus type="email" name="email" ng-model="login.email"
                                            class="form-control" placeholder="e-mail" required>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-lock fa-lg"></i></span>
-                                    <input type="password" name="password" ng-focus ng-model="login.password"
+                                    <input type="password" name="password" ng-model="login.password"
                                            class="form-control" placeholder="password" required>
                                 </div>
                             </div>
@@ -65,9 +65,9 @@
                         <form ng-show="form.password" ng-cloak name="resetForm" class="form reset-form flip-in"
                               ng-submit="processResetForm()">
                             <div class="input-group"
-                                 ng-class="{ 'has-error' : resetForm.email.$invalid && resetForm.email.$dirty && !resetForm.email.$focused }">
+                                 ng-class="{ 'has-error' : resetForm.email.$invalid && resetForm.email.$dirty}">
                                 <span class="input-group-addon"><i class="fa fa-envelope fa-lg"></i></span>
-                                <input type="email" name="email" ng-focus ng-model="remind.email" class="form-control"
+                                <input type="email" name="email" ng-model="remind.email" class="form-control"
                                        placeholder="e-mail" required value="">
                             </div>
                             <div class="checkbox">
