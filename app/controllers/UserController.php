@@ -1,11 +1,11 @@
 <?php
 namespace FH\Controllers;
 
-use FH\Models\Users;
+use FH\Models\User;
 use Phalcon\Http\Response;
 
 /**
- * Users controller class
+ * User controller class
  */
 class UserController extends ControllerBase
 {
@@ -88,7 +88,7 @@ class UserController extends ControllerBase
         if (empty($data['id'])) {
             return $this->error404();
         }
-        $user = Users::findFirst($data['id']);
+        $user = User::findFirst($data['id']);
         if (empty($user)) {
             return $this->error404();
         }
@@ -118,7 +118,7 @@ class UserController extends ControllerBase
         if (empty($data['id'])) {
             return $this->error404();
         }
-        $user = Users::findFirst($data['id']);
+        $user = User::findFirst($data['id']);
         if (empty($user)) {
             return $this->error404();
         }
@@ -138,7 +138,7 @@ class UserController extends ControllerBase
         $this->onlyAjax();
 
         return $this->jsonResponse(
-            Users::find(['order' => 'createdAt DESC'])
+            User::find(['order' => 'createdAt DESC'])
         );
     }
     
@@ -163,7 +163,7 @@ class UserController extends ControllerBase
             return $this->error404();
         }
         
-        $user = new Users;
+        $user = new User;
         $user->setData($data);
         $user->roles = empty($data['roles']) ? null: [$data['roles']];
         $password = $this->di->get('helper')->getToken(6, true, 'lud');

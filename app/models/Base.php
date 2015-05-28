@@ -150,8 +150,8 @@ class Base extends Model implements \JsonSerializable
     }
 
     /**
-     * Converts array to PostgreSQL format
-     * @param mixed$value
+     * Converts array to sql format
+     * @param mixed $value
      * @return null|string|array
      */
     public function convertArray($value)
@@ -159,13 +159,13 @@ class Base extends Model implements \JsonSerializable
         if (empty($value)) {
             return null;
         }
-
-        // Convert array to PostgreSQL format
+        // serialize array
         if (is_array($value)) {
-            return '{'.implode(',', $value).'}';
+
+            return serialize($value);
         }
 
-        return explode(',', preg_replace('/[^A-za-z0-9\_\s\,]/iu', '', $value));
+        return unserialize($value);
     }
 
     /**

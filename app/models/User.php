@@ -7,9 +7,9 @@ use Phalcon\Mvc\Model\Validator\PresenceOf as PresenceOfValidator;
 use Phalcon\Mvc\Model\Validator\StringLength as StringLengthValidator;
 
 /**
- * Users model
+ * User model
  */
-class Users extends Base
+class User extends Base
 {
     /**
      * @var string
@@ -17,7 +17,7 @@ class Users extends Base
     public $name;
 
     /**
-     * Users roles
+     * User roles
      * @var array
      */
     public $roles = [];
@@ -47,11 +47,21 @@ class Users extends Base
      */
     public $cookieIp;
 
+    public $active = true;
+
     /**
      * Not encoded password
      * @var string
      */
     private $plainPassword = null;
+
+    /**
+     * @return string
+     */
+    public function getSource()
+    {
+        return 'users';
+    }
 
     /**
      * Return username

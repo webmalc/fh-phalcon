@@ -4,9 +4,9 @@ namespace FH\Models;
 use FH\Validators\Uniqueness as UniquenessValidator;
 
 /**
- * LoginAttempts model
+ * LoginAttempt model
  */
-class LoginAttempts extends Base
+class LoginAttempt extends Base
 {
     /**
      * @var int
@@ -22,6 +22,14 @@ class LoginAttempts extends Base
      * @var \DateTime
      */
     public $date;
+
+    /**
+     * @return string
+     */
+    public function getSource()
+    {
+        return 'login_attempts';
+    }
 
     /**
      * Entry validation
