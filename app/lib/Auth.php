@@ -1,8 +1,11 @@
 <?php
 namespace FH\Lib;
+
 use FH\Models\LoginAttempt;
+use FH\Models\UserCookie;
 use Phalcon\Mvc\User\Component;
 use FH\Models\User;
+
 /**
  * Auth class
  */
@@ -40,12 +43,12 @@ class Auth extends Component
 
         // Check if the user exist
         if (empty($user)) {
-            throw new Exception('User with email ' . $email . ' not found');
+            throw new Exception('User with email '.$email.' not found');
         }
         $password = $this->di->get('helper')->getToken(6, true, 'lud');
         $user->setPassword($password);
         $user->save();
-        $this->di->get('mail')->send($user->email, 'New password: ' . $password);
+        $this->di->get('mail')->send($user->email, 'New password: '.$password);
     }
 
     /**
@@ -107,8 +110,9 @@ class Auth extends Component
             $bind['attempt'] = $max;
             $attemptSql = ' AND attempt >= :attempt:';
         }
+
         return LoginAttempt::findFirst([
-            'conditions' => " ip = :ip: AND active = :active:" . $attemptSql,
+            'conditions' => " ip = :ip: AND active = :active:".$attemptSql,
             'bind' => $bind
         ]);
     }
@@ -154,7 +158,7 @@ class Auth extends Component
             $date->modify($config->auth->loginAttemptsBlockDuration);
 
             if (new \DateTime() <= $date) {
-                throw new Exception('Access denied for ' . $config->auth->loginAttemptsBlockDuration);
+                throw new Exception('Access denied for '.$config->auth->loginAttemptsBlockDuration);
             }
             $this->removeLoginAttempt();
         }
@@ -162,13 +166,13 @@ class Auth extends Component
         // Check if the user exist
         if (empty($user)) {
             $this->addLoginAttempt();
-            throw new Exception('User with email ' . $email . ' not found');
+            throw new Exception('User with email '.$email.' not found');
         }
 
         // Check user password
         if (!password_verify($password, $user->password)) {
             $this->addLoginAttempt();
-            throw new Exception('Wrong password for user with email ' . $email);
+            throw new Exception('Wrong password for user with email '.$email);
         }
 
         return $this->login($user, $remember);
@@ -192,7 +196,7 @@ class Auth extends Component
         $user->save();
 
         // Create log
-        $this->getDI()->get('logger')->log('Logged user #' . $user->id . ' with email: '. $user->email);
+        $this->getDI()->get('logger')->log('Logged user #'.$user->id.' with email: '.$user->email);
 
         return $user;
     }
@@ -218,11 +222,22 @@ class Auth extends Component
     {
         $token = $this->di->get('helper')->getToken(40, false, 'lud');
         $this->cookies->set('auth', serialize(['id' => $user->id, 'token' => $token]), time() + 60 * 60 * 24 * 7);
-        $user->cookie = password_hash($token, PASSWORD_DEFAULT);
-        $user->cookieIp = $this->request->getClientAddress();
+
+        //remove old cookies by IP
+        foreach ($user->getCookies("ip = '".$this->request->getClientAddress()."'") as $oldCookie) {
+            $oldCookie->delete();
+        }
+
+        //save cookie to DB
+        $cookie = new UserCookie();
+        $cookie->user = $user;
+        $cookie->hash = password_hash($token, PASSWORD_DEFAULT);
+        $cookie->ip = $this->request->getClientAddress();
+        $cookie->save();
 
         return $user;
     }
+
     /**
      * Get auth cookie
      * @return boolean|array
@@ -235,8 +250,10 @@ class Auth extends Component
                 return $data;
             }
         }
+
         return false;
     }
+
     /**
      * Check if user is logged
      * @return boolean|string
@@ -249,6 +266,7 @@ class Auth extends Component
         if ($this->getCookie()) {
             return self::AUTH_COOKIE;
         }
+
         return false;
     }
 
@@ -258,19 +276,21 @@ class Auth extends Component
      */
     public function logout(User $user = null)
     {
-        if(!$user) {
+        if (!$user) {
             $user = $this->getUser();
         }
         if ($user) {
-            $user->cookie = null;
-            $user->cookieIp = null;
-            $user->save();
+            //remove old cookies by IP
+            foreach ($user->getCookies("ip = '".$this->request->getClientAddress()."'") as $oldCookie) {
+                $oldCookie->delete();
+            }
         }
         $this->session->remove('auth');
         if ($this->getCookie()) {
             $this->cookies->delete('auth');
         }
     }
+
     /**
      * Return user instance
      * @return \FH\Models\User|null
@@ -285,26 +305,29 @@ class Auth extends Component
             return $this->user;
         }
         if ($type == self::AUTH_SESSION) {
-            /* @var $user \FH\Models\User */
             $user = User::findFirst($this->session->get('auth'));
         }
         if ($type == self::AUTH_COOKIE) {
             $cookie = $this->getCookie();
-
-            /* @var $user \FH\Models\User */
-            $user = User::findFirst($cookie['id']);
             $ip = $this->request->getClientAddress();
-            if (empty($user) || !password_verify($cookie['token'], $user->cookie) || $user->cookieIp != $ip) {
+            $cookieEntry = UserCookie::find([
+                'conditions' => " user_id = :user_id: AND ip = :ip:",
+                'bind' => ['user_id' => $cookie['id'], 'ip' => $ip]
+            ]);
+
+            if (empty($cookieEntry) || !password_verify($cookie['token'], $cookieEntry->hash) || $cookieEntry->ip != $ip) {
                 if ($user) {
                     $this->logout($user);
                 }
                 return null;
             }
+            $user = $cookieEntry->user;
         }
         if (empty($user) || !$user->active) {
             return null;
         }
         $this->user = $user;
+
         return $user;
     }
 }

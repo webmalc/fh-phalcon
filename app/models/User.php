@@ -38,18 +38,6 @@ class User extends Base
     public $lastLogin;
 
     /**
-     * @var string
-     */
-    public $cookie;
-
-    /**
-     * @var string
-     */
-    public $cookieIp;
-
-    public $active = true;
-
-    /**
      * Not encoded password
      * @var string
      */
@@ -61,6 +49,11 @@ class User extends Base
     public function getSource()
     {
         return 'users';
+    }
+
+    public function initialize()
+    {
+        $this->hasMany('id', '\FH\Models\UserCookie', 'user_id', ['alias' => 'cookies']);
     }
 
     /**

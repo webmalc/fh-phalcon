@@ -1,6 +1,8 @@
 <?php
 namespace FH\Controllers;
 
+use FH\Models\UserCookie;
+
 /**
  * Finances controller class
  */
