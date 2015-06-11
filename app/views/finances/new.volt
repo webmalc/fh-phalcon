@@ -9,7 +9,7 @@
             <div class="input-group col-sm-11">
                 <span class="input-group-addon" tooltip="Tags"><i class="fa fa-tags"></i></span>
                 <tags-input ng-model="transaction.tags" min-tags="1" maxTags="3" placeholder="add...">
-                    <auto-complete source="loadTags($query)" min-length="2" maxResultsToShow="30"></auto-complete>
+                    <auto-complete source="loadTags($query)" min-length="1" maxResultsToShow="30"></auto-complete>
                 </tags-input>
             </div>
         </div>
@@ -32,9 +32,8 @@
 
             <div class="input-group col-sm-11">
                 <span class="input-group-addon" tooltip="Type"><i class="fa fa-question"></i></span>
-                <select class="form-control" id="incoming" name="incoming" required ng-model="transaction.incoming">
-                    <option selected value="0">expense</option>
-                    <option value="1">income</option>
+                <select class="form-control" id="incoming" name="incoming" ng-model="transaction.incoming"
+                        ng-options="entry.val as entry.title for entry in [{ title: 'expense', val: false }, { title: 'income', val: true }]">
                 </select>
             </div>
         </div>

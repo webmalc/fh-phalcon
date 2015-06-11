@@ -92,7 +92,10 @@ $di->set('db', function () use ($config) {
         'host' => $config->database->host,
         'username' => $config->database->username,
         'password' => $config->database->password,
-        'dbname' => $config->database->dbname
+        'dbname' => $config->database->dbname,
+        'options' => [
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
+        ]
     ));
 });
 

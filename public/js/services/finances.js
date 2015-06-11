@@ -4,6 +4,7 @@ angular.module('fh.services')
         function ($resource) {
             'use strict';
             return $resource('finances/:id', {}, {
-                'getTags': {method: 'POST', params: {id: 'tags'}, isArray: true}
+                'getTags': {method: 'POST', params: {id: 'tags'}, isArray: true},
+                'new': {method: 'POST', params: {id: 'new'}}
             });
         }]);

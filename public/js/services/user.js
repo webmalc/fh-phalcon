@@ -12,4 +12,4 @@ angular.module('fh.services')
                 'delete': {method: 'POST', params: {id: 'delete'}}
             });
         }
-    ]);
+        ]);

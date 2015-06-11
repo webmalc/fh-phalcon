@@ -86,12 +86,12 @@ class ControllerBase extends Controller
             return null;
         }
         $data = json_decode($this->request->getRawBody(), true);
-        var_dump($data);
+
         if (empty($data)) {
             return null;
         }
         if (!empty($filter)) {
-            $data = array_map('trim', $data);
+            array_walk_recursive($data, 'trim');
             $data = filter_var_array($data, $filter);
             foreach ($data as $key => $value) {
                 if (empty($value)) {

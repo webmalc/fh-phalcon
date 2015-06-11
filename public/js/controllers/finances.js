@@ -2,9 +2,10 @@
 angular.module('fh.controllers').controller('FinancesController', ['$scope', '$q', 'User', 'Finances', function ($scope, $q, User, Finances) {
     'use strict';
 
+    $scope.loading = false;
     //new transaction
     $scope.transaction = {
-        'incoming': 0,
+        'incoming': false,
         'user': $scope.user
     };
     //tags
@@ -19,7 +20,20 @@ angular.module('fh.controllers').controller('FinancesController', ['$scope', '$q
     });
 
     $scope.processTransactionForm = function () {
-        console.log($scope.transaction);
-        console.log($scope.transaction);
-    }
+        $scope.loading = true;
+        Finances.new($scope.transaction, function (response) {
+            if (response.success) {
+                $scope.alert = {type: 'success', msg: response.message};
+                $scope.transaction = {
+                    'incoming': false,
+                    'user': $scope.user
+                };
+            } else {
+                $scope.alert = {type: 'danger', msg: response.message};
+            }
+            $scope.loading = false;
+        }, function () {
+            $scope.alert = {type: 'danger', msg: 'Server error! Please reload the page (F5).'};
+        });
+    };
 }]);

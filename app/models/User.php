@@ -54,6 +54,7 @@ class User extends Base
     public function initialize()
     {
         $this->hasMany('id', '\FH\Models\UserCookie', 'user_id', ['alias' => 'cookies']);
+        $this->hasMany('id', '\FH\Models\Finances', 'user_id', ['alias' => 'finances']);
     }
 
     /**
